@@ -16,7 +16,8 @@ export const authMiddleware = (req: AuthRequest, res: Response, next: NextFuncti
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return res.status(401).json({ message: 'Unauthorized: No token provided' });
+    res.status(401).json({ message: 'Unauthorized: No token provided' });
+    return;
   }
 
   const token = authHeader.split(' ')[1]; // Get the actual token after "Bearer"
@@ -37,6 +38,7 @@ export const authMiddleware = (req: AuthRequest, res: Response, next: NextFuncti
     catch (error) {
         next(error);
         console.error('JWT Verification Error:', error);
-        return res.status(401).json({ message: 'Unauthorized: Invalid token' });
+        res.status(401).json({ message: 'Unauthorized: Invalid token' });
+        return;
     }
 }
