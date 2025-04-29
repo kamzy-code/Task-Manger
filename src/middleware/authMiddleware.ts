@@ -29,9 +29,13 @@ export const authMiddleware = (req: AuthRequest, res: Response, next: NextFuncti
 
     try {
         // 2. Verify the token
-    const decoded = jwt.verify(token, JWT_SECRET) as { id: string };
+    const decoded = jwt.verify(token, JWT_SECRET) as { userID: string };
+    console.log('Decoded JWT:', decoded); // Log the decoded token for debugging
+
     // 3. Attach user info to the request
-    req.user = { id: decoded.id };
+    req.user = { id: decoded.userID }; // Attach user ID to the request object
+    console.log('User ID:', req.user.id); // Log the user ID for debugging
+
     // 4. Move to the next middleware/controller
     next();
     }

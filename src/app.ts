@@ -13,7 +13,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 
 // Mount board routes
-app.use("/api/boards", authRoutes);
+app.use("/api/boards", boardRoutes);
 
 app.get("/", (req, res) => {
     console.log("API is running...");
