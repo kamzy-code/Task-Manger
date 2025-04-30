@@ -23,7 +23,7 @@ class BoardService {
     }
 
     // update a board by ID
-    async updateBoard (boardId:string, userId: string, updateInfo: Object) : Promise<IBoard | null> {
+    async updateBoard (boardId:string, userId: string, updateInfo: Partial<IBoard>) : Promise<IBoard | null> {
         const updatedBoard = await Board.findOneAndUpdate({_id: boardId, createdBy: userId}, updateInfo, {new: true});
         return updatedBoard;
     }

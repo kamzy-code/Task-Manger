@@ -57,7 +57,7 @@ class BoardController{
 
     async updateBoard (req: AuthRequest, res: Response){
         const {id} = req.params;
-        const updateInfo: object = req.body;
+        const updateInfo = req.body;
 
         if(!req.user){
            res.status(400).json({message: "Unauthorized"});
