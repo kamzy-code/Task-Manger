@@ -14,22 +14,20 @@ class BoardController{
             return;
         };
 
-        if(!req.user) {
-            res.status(401).json({ message: "Unauthorized" });
+        try {
+            const board = await boardService.createBoard(title, description, req.user!.id);
+            res.status(201).json(board);
             return;
-        };
 
-        const board = await boardService.createBoard(title, description, req.user!.id);
-        res.status(201).json(board);
-        return;
+        } catch (error) {
+            res.status(500).json({ message: "Error creating board", error });
+            return; 
+        }
     }
 
     async getAllBoards(req: AuthRequest, res: Response) {
-        if (!req.user) {
-            res.status(401).json({ message: "Unauthorized" });
-            return;
-        }
-        const userId = req.user.id;
+        
+        const userId = req.user!.id;
         const boards = await boardService.getAllBoards(userId);
 
         res.status(200).json(boards);
@@ -38,20 +36,21 @@ class BoardController{
 
     async getBoardById (req: AuthRequest, res: Response){
         const boardId = req.params.id;
-        if (!req.user){
-            res.status(401).json({message: "Unauthorized"});
+
+        const userId = req.user!.id;
+
+        try {
+            const board = await boardService.getBoardById(boardId, userId);
+            if (!board) {
+                res.status(404).json({message: "Board not found"});
+                return;
+            }
+            res.status(200).json(board);
+            return;
+        } catch (error) {
+            res.status(500).json({message: "Error getting board", error});
             return;
         }
-
-        const userId = req.user.id;
-        const board = await boardService.getBoardById(boardId, userId);
-        if (!board) {
-            res.status(404).json({message: "Board not found"});
-            return;
-        }
-
-        res.status(200).json(board);
-        return;
 
     }
 
@@ -59,41 +58,42 @@ class BoardController{
         const {id} = req.params;
         const updateInfo = req.body;
 
-        if(!req.user){
-           res.status(400).json({message: "Unauthorized"});
-           return;
-        }
+        const userId = req.user!.id;
+        try {
+            const board = await boardService.updateBoard(id, userId, updateInfo);
 
-        const userId = req.user.id;
-        const board = boardService.updateBoard(id, userId, updateInfo);
+            if(!board){
+                res.status(404).json({message: "Board not found"});
+                return;
+            }
 
-        if(!board){
-            res.status(404).json({message: "Board not found"});
+            res.status(200).json(board);
+            return;
+        } catch (error) {
+            res.status(500).json({message: "Error updating board", error});
             return;
         }
-
-        res.status(200).json(board);
-        return;
     }
 
     async deleteBoard (req: AuthRequest, res: Response){
         const {id} = req.params;
 
-        if(!req.user){
-           res.status(400).json({message: "Unauthorized"});
-           return;
-        }
+        const userId = req.user!.id;
 
-        const userId = req.user.id;
-        const board = boardService.deletBoard(id, userId);
+        try {
+            const board = await boardService.deletBoard(id, userId);
 
-        if(!board){
-            res.status(404).json({message: "Board not found"});
+            if(!board){
+                res.status(404).json({message: "Board not found"});
+                return;
+            }
+    
+            res.status(200).json(board);
+            return;
+        } catch (error) {
+            res.status(500).json({message: "Error deleting board", error});
             return;
         }
-
-        res.status(200).json(board);
-        return;
     }
 }
 

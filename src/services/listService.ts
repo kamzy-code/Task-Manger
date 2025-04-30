@@ -31,3 +31,5 @@ class ListService{
         return list;
     }
 }
+
+export const listService = new ListService();
