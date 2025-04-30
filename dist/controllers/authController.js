@@ -7,6 +7,8 @@ exports.login = exports.register = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const userModel_1 = __importDefault(require("../models/userModel"));
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 const JWT_SECRET = process.env.JWT_SECRET;
 // register a new user
 const register = async (req, res, next) => {
@@ -61,7 +63,7 @@ const login = async (req, res, next) => {
         ;
         // Generate a token
         const token = jsonwebtoken_1.default.sign({ userID: user.id }, JWT_SECRET, { expiresIn: "1d" });
-        res.json({ token });
+        res.status(201).json({ token });
         return;
     }
     catch (error) {
