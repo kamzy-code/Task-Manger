@@ -6,11 +6,11 @@ export interface IBoard extends Document {
     createdBy: mongoose.Types.ObjectId;
 }
 
-const boardSchema = new Schema(
+const boardSchema = new Schema<IBoard>(
     {
         title: {type: String, required: true},
         description: {type: String, required: false},
-        createdBy: {type: mongoose.Types.ObjectId, ref: "User", required: true},
+        createdBy: {type: mongoose.Schema.Types.ObjectId, ref: "User", required: true},
     },
     {timestamps: true}
 ); 

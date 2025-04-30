@@ -8,12 +8,12 @@ export interface Ilist extends Document{
     createdBy: mongoose.Types.ObjectId;
 }
 
-const listSchema = new Schema(
+const listSchema = new Schema<Ilist>(
     {
         title: {type: String, required: true},
         position: {type: Number, required: true},
-        boardId: {type: mongoose.Types.ObjectId, ref: "Board", required: true},
-        createdBy: {type: mongoose.Types.ObjectId, ref: "User", required: true},
+        boardId: {type: mongoose.Schema.Types.ObjectId, ref: "Board", required: true},
+        createdBy: {type: mongoose.Schema.Types.ObjectId, ref: "User", required: true},
     },
     {timestamps: true}
 );
